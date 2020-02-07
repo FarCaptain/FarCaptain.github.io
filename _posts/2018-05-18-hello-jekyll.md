@@ -29,3 +29,19 @@ Throughout this guide there are a number of small-but-handy pieces of informatio
 ### Video Test
 
 <iframe type="text/html" width="100%" height="385" src="http://www.youtube.com/embed/gfmjMWjn-Xg" frameborder="0"></iframe>
+
+### Latex 测试
+
+```cpp
+for(int i=0;i<n;++i){
+	dev.push_back(jet[i].lft);
+	cout << "just a test"<<endl;
+}
+//像这样
+```
+
+这里的测试是 $ c = \sqrt{a^{2}+b_{xy}^{2}+e^{x}} $ 这个公式
+
+接下来有：
+
+$$ c = \sqrt{a^{2}+b_{xy}^{2} +e^{x}} $$
