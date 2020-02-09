@@ -1,5 +1,5 @@
 # Site settings 配置站点
-title: 'BlogSphinx'
+title: 'Sphinx'
 description: 'Welcome to the riddle cave'
 keywords: 'blog, Sphinx'
 url: 'https://FarCaptain.github.io' 
@@ -27,20 +27,20 @@ portraits: '/assets/profile.jpg'
 # SNS
 SNS: true
 SNS-icon: #['Facebook', 'weibo', 'qq', 'github', 'Dribbble', 'Twitter', 'instagram', 'weixin', 'Codepen']
-  mail: 'mailto:farcaptain@gmail.com'
-  weixin: '' # 你的微信二维码存放的地址
-  qq: '' # 你的qq二维码存放的地址 or http://wpa.qq.com/msgrd?v=3&uin='你的QQ号'&site=qq&menu=yes
+  mail: 'mailto:quyuan2008@163.com'
+  #weixin: '' # 你的微信二维码存放的地址
+  #qq: '' # 你的qq二维码存放的地址 or http://wpa.qq.com/msgrd?v=3&uin='你的QQ号'&site=qq&menu=yes
   github: 'https://github.com/FarCaptain'
-  Codepen: ''
-  weibo: ''
-  instagram: ''
-  Twitter: ''
-  Dribbble: ''
-  Facebook: ''
-  Google: ''
-  zhihu: ''
-  juejin: ''
-  twitch: ''
+  #Codepen: ''
+  weibo: 'https://weibo.com/u/5730149167'
+  #instagram: ''
+  #Twitter: ''
+  #Dribbble: ''
+  #Facebook: ''
+  #Google: ''
+  #zhihu: ''
+  #juejin: ''
+  #twitch: ''
 
 # 分页
 paginate: 2
@@ -68,10 +68,10 @@ friends:
 disqus: false
 disqus_url: '' # https://abc.disqus.com/embed.js
 # 来必力评论
-livere: false
+livere: true
 livere_uid: 'MTAyMC8zNDI2OS8xMDgwNg==' # MTAyMC8zNDI2OS8xMDgwNg==
 # Gitment评论 OAuth Application
-Gitment: true
+Gitment: false
 Gitment_owner: ''  # github用户名
 Gitment_repo: ''  # github博客存放的仓库名
 client_id: ''  # 注册 OAuth Application 后获得的 client_id
