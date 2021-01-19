@@ -1,0 +1,57 @@
+---
+layout: post
+title: 'z-buffer精度浅谈'
+date: 2021-01-19
+author: Sphinx
+color: rgb(135,206,235)
+cover: 'https://i.loli.net/2020/02/10/YWa7I6wkdxsR2MJ.jpg'
+tags: rendering
+---
+
+>z-buffer精度产生的z-fighting可以说是十分常见的现象，尤其在硬件条件有限的时候。
+>  - 我们都知道，其实z-buffer是一个整形的数组，并非作为float保存，对于比较常见的24位z-buffer，其范围在0~16777215之间。
+> - 我们知道，z-buffer不是线性映射的。
+> - 我们还知道，我们在做透视投影的时候在w上保留了一位1/z（或者1/-z，取决于坐标系；这里用z轴朝里的左手系举例，乘上1/z），这样对于其次坐标的运算以及shading的插值都比较方便。
+> 
+> 那么，z-buffer是怎么映射到存储中的，又是如何产生的精度问题呢。
+
+## 深度值是咋保存在Z-buffer里的
+
+不妨假设我们的NDC深度范围是在0 \~ 1，就说明我们想要最后做透视除法以后范围在0\~1之间。用大写的Z代表0~1范围的深度映射值，z表示世界坐标系下的深度值，可以得到公式：
+![09c543caf44bb46de132dc768664022.png](https://i.loli.net/2021/01/19/vBxjoWdPOu2f6ZL.png) （公式1）
+我们可以代入的值是：近裁剪面 n，远裁剪面f。
+解得:
+![ee75d77d5d7c7512e7315c052307944.gif](https://i.loli.net/2021/01/19/jUt7gXce34dJpWo.gif)
+![a69df416bcbbf002e0fb4d9f25c4ae9.gif](https://i.loli.net/2021/01/19/YNwM7R5gJdBcIx6.gif)
+映射到硬件Z-Buffer内的整形 (Zbuffer:范围在0~16777215之间) 就可以表示为：
+![75f094ca1c27aef4877a22d1a596ca9.gif](https://i.loli.net/2021/01/19/m3A5r4BaHFZexjv.gif)   (公式3)
+
+## 精度有啥问题
+考虑到GPU上的计算性能以及我们在三角形上做shading时的差值的方便，主流的方法是在映射的时候除上z的（公式1）。
+也就是说，我们的Zbuffer，其实是一个关于z的反比例函数。
+![喏，给你看个反比例函数](https://i.loli.net/2021/01/19/HgfRVFPNEu2y5JM.jpg)
+深度小的时候，Zbuffe下降是比较快的，也就是与镜头离得近的部分精度大，离得远的部分精度小。
+
+精度可以表示为：
+![delta.gif](https://i.loli.net/2021/01/19/XZ4o6cCB5UHIQiJ.gif)
+
+
+听上去也还算比较符合我们的应用场景。不过如果安排不合理，就会出现远处精度不够用的情况。
+想要直观感受一下精度的下降速度，可以参考:
+[Learning to Love your Z-buffer.](https://www.sjbaker.org/steve/omniv/love_your_z_buffer.html)
+使用网页上的Z Calculator计算一下。
+这里举个例子：
+假设近裁剪面 n = 1，远裁剪面 f = 10000，带入公式3:
+- z = 1000 时，Zbuffer = 16762114， 只剩下15102
+- z = 9000时，Zbuffer = 16777029，只剩187
+- z = 10000，Zbuffer达到最大值
+
+可以发现，9000\~10000 范围内，可用的值只有187个。就是说 z变化5次，Zbuffer差不多变化一次。
+也就是说在这个范围内，深度变化5个单位长度，Zbuffer才会有区别，显卡才能判断前后关系。
+
+
+## 如何避免误差
+  缩小范围，在可接受范围内，尽量把近裁剪面拉远，远裁剪面拉近。有的文章建议远近裁剪面的比例不应该超过1000。
+
+如果想要处理误差
+[这篇文章](https://www.cnblogs.com/czaoth/p/5830725.html)写的很好，具体情况可以参考。
