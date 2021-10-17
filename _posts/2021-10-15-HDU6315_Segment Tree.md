@@ -4,7 +4,7 @@ title: 'An Interesting implementation of Segment Tree'
 date: 2021-10-15
 author: Sphinx
 color: rgb(135,206,235)
-cover: 'https://i.loli.net/2021/01/20/gFvVkBMldKSHfCP.jpg'
+cover: ''/assets/imgs/train.webp''
 tags: data structures
 ---
 
